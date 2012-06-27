@@ -1,0 +1,7 @@
+self.sync(): only open(sb) once
+open(uri) only when sync
+bs.status should only be final after all bse are saved
+highlight players
+add BoxScore 'date' index to schema ???
+print stack trace during log:error
+to_s() for before_save() calls
