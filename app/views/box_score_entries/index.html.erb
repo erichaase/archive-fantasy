@@ -1,0 +1,61 @@
+<h1>Listing box_score_entries</h1>
+
+<table>
+  <tr>
+    <th>Pid espn</th>
+    <th>Fname</th>
+    <th>Lname</th>
+    <th>Min</th>
+    <th>Fgm</th>
+    <th>Fga</th>
+    <th>Tpm</th>
+    <th>Tpa</th>
+    <th>Ftm</th>
+    <th>Fta</th>
+    <th>Oreb</th>
+    <th>Reb</th>
+    <th>Ast</th>
+    <th>Stl</th>
+    <th>Blk</th>
+    <th>To</th>
+    <th>Pf</th>
+    <th>Plusminus</th>
+    <th>Pts</th>
+    <th>Status</th>
+    <th></th>
+    <th></th>
+    <th></th>
+  </tr>
+
+<% @box_score_entries.each do |box_score_entry| %>
+  <tr>
+    <td><%= box_score_entry.pid_espn %></td>
+    <td><%= box_score_entry.fname %></td>
+    <td><%= box_score_entry.lname %></td>
+    <td><%= box_score_entry.min %></td>
+    <td><%= box_score_entry.fgm %></td>
+    <td><%= box_score_entry.fga %></td>
+    <td><%= box_score_entry.tpm %></td>
+    <td><%= box_score_entry.tpa %></td>
+    <td><%= box_score_entry.ftm %></td>
+    <td><%= box_score_entry.fta %></td>
+    <td><%= box_score_entry.oreb %></td>
+    <td><%= box_score_entry.reb %></td>
+    <td><%= box_score_entry.ast %></td>
+    <td><%= box_score_entry.stl %></td>
+    <td><%= box_score_entry.blk %></td>
+    <td><%= box_score_entry.to %></td>
+    <td><%= box_score_entry.pf %></td>
+    <td><%= box_score_entry.plusminus %></td>
+    <td><%= box_score_entry.pts %></td>
+    <td><%= box_score_entry.status %></td>
+    <td><%= link_to 'Show', box_score_entry %></td>
+    <td><%= link_to 'Edit', edit_box_score_entry_path(box_score_entry) %></td>
+    <td><%= link_to 'Destroy', box_score_entry, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New Box score entry', new_box_score_entry_path %>

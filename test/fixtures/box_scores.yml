@@ -1,0 +1,11 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  gid_espn: 1
+  status: MyString
+  date: 2012-06-27
+
+two:
+  gid_espn: 1
+  status: MyString
+  date: 2012-06-27

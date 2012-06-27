@@ -1,0 +1,97 @@
+<%= form_for(@box_score_entry) do |f| %>
+  <% if @box_score_entry.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@box_score_entry.errors.count, "error") %> prohibited this box_score_entry from being saved:</h2>
+
+      <ul>
+      <% @box_score_entry.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :pid_espn %><br />
+    <%= f.number_field :pid_espn %>
+  </div>
+  <div class="field">
+    <%= f.label :fname %><br />
+    <%= f.text_field :fname %>
+  </div>
+  <div class="field">
+    <%= f.label :lname %><br />
+    <%= f.text_field :lname %>
+  </div>
+  <div class="field">
+    <%= f.label :min %><br />
+    <%= f.number_field :min %>
+  </div>
+  <div class="field">
+    <%= f.label :fgm %><br />
+    <%= f.number_field :fgm %>
+  </div>
+  <div class="field">
+    <%= f.label :fga %><br />
+    <%= f.number_field :fga %>
+  </div>
+  <div class="field">
+    <%= f.label :tpm %><br />
+    <%= f.number_field :tpm %>
+  </div>
+  <div class="field">
+    <%= f.label :tpa %><br />
+    <%= f.number_field :tpa %>
+  </div>
+  <div class="field">
+    <%= f.label :ftm %><br />
+    <%= f.number_field :ftm %>
+  </div>
+  <div class="field">
+    <%= f.label :fta %><br />
+    <%= f.number_field :fta %>
+  </div>
+  <div class="field">
+    <%= f.label :oreb %><br />
+    <%= f.number_field :oreb %>
+  </div>
+  <div class="field">
+    <%= f.label :reb %><br />
+    <%= f.number_field :reb %>
+  </div>
+  <div class="field">
+    <%= f.label :ast %><br />
+    <%= f.number_field :ast %>
+  </div>
+  <div class="field">
+    <%= f.label :stl %><br />
+    <%= f.number_field :stl %>
+  </div>
+  <div class="field">
+    <%= f.label :blk %><br />
+    <%= f.number_field :blk %>
+  </div>
+  <div class="field">
+    <%= f.label :to %><br />
+    <%= f.number_field :to %>
+  </div>
+  <div class="field">
+    <%= f.label :pf %><br />
+    <%= f.number_field :pf %>
+  </div>
+  <div class="field">
+    <%= f.label :plusminus %><br />
+    <%= f.number_field :plusminus %>
+  </div>
+  <div class="field">
+    <%= f.label :pts %><br />
+    <%= f.number_field :pts %>
+  </div>
+  <div class="field">
+    <%= f.label :status %><br />
+    <%= f.text_field :status %>
+  </div>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

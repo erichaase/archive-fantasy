@@ -1,0 +1,29 @@
+<%= form_for(@box_score) do |f| %>
+  <% if @box_score.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@box_score.errors.count, "error") %> prohibited this box_score from being saved:</h2>
+
+      <ul>
+      <% @box_score.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :gid_espn %><br />
+    <%= f.number_field :gid_espn %>
+  </div>
+  <div class="field">
+    <%= f.label :status %><br />
+    <%= f.text_field :status %>
+  </div>
+  <div class="field">
+    <%= f.label :date %><br />
+    <%= f.date_select :date %>
+  </div>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

@@ -1,0 +1,27 @@
+<h1>Listing box_scores</h1>
+
+<table>
+  <tr>
+    <th>Gid espn</th>
+    <th>Status</th>
+    <th>Date</th>
+    <th></th>
+    <th></th>
+    <th></th>
+  </tr>
+
+<% @box_scores.each do |box_score| %>
+  <tr>
+    <td><%= box_score.gid_espn %></td>
+    <td><%= box_score.status %></td>
+    <td><%= box_score.date %></td>
+    <td><%= link_to 'Show', box_score %></td>
+    <td><%= link_to 'Edit', edit_box_score_path(box_score) %></td>
+    <td><%= link_to 'Destroy', box_score, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New Box score', new_box_score_path %>
