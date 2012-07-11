@@ -4,9 +4,11 @@ Fantasy::Application.routes.draw do
   resources :box_scores
   resources :box_score_entries
 
-  get   'ratings/now'
+  #get   'ratings/now'
+  #match 'ratings'       => 'ratings#index', :via => :get
+
   match 'ratings/:date' => 'ratings#day',   :via => :get, :date => /\d{6}/
-  match 'ratings'       => 'ratings#index', :via => :get
+  match 'sync/:date'    => 'ratings#sync',  :via => :get, :date => /\d{6}/
 
   # The priority is based upon order of creation:
   # first created -> highest priority.
