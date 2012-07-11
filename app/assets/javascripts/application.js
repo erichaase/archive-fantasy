@@ -12,6 +12,7 @@
 //
 //= require jquery
 //= require jquery_ujs
+//= require jquery.ui.datepicker
 //= require_tree .
 
 // todo
@@ -19,30 +20,51 @@
 //   jQuery Progressbar?
 
 $(document).ready(function(){
-  $("button#update").click(function() { requestData("ratings/now"); });
-  requestData("ratings");
-  // update $("p#status") if getJSON failed
+  $("#datepicker").datepicker({ dateFormat: "ymmdd" });
+
+  $("button#sync").click(function() {
+    disableButtons();
+    var url = "sync/" + $("#datepicker").val();
+    $("#status").html("sync: get: " + url + "\n...\n");
+    $.get(url, function(data) {
+      $("#status").append("sync: success: " + data + "\n");
+      enableButtons();
+    });
+  });
+
+  $("button#update").click(function() {
+    disableButtons();
+    var url = "ratings/" + $("#datepicker").val();
+    $("#status").html("update: get: " + url + "\n...\n");
+    $.getJSON(url, function(data) {
+      // assert that oXmlHttp.getResponseHeader("Content-Type") contains "application/json"
+      // add error checking to determine if json data is valid
+      // error/warning if status != 200
+      //   $("#status").append("An error occurred while updating (statusText = '" + oXmlHttp.statusText + "')");
+      fillTable(data);
+      $("#status").append("update: success\n");
+      enableButtons();
+    });
+  });
 });
 
-function requestData ( url ) {
-  $("p#status").html("updating: " + url);
-  $.getJSON(url,function (data) {
-    // assert that oXmlHttp.getResponseHeader("Content-Type") contains "application/json"
-    // add error checking to determine if json data is valid
-    // error/warning if status != 200
-    //   $("p#status").html("An error occurred while updating (statusText = '" + oXmlHttp.statusText + "')");
-    fillTable(data);
-    $("p#status").html(""); // include time
-  });
+function disableButtons () {
+  $("#sync").attr("disabled", "disabled");
+  $("#update").attr("disabled", "disabled");
+}
+
+function enableButtons () {
+  $("#sync").removeAttr("disabled");
+  $("#update").removeAttr("disabled");
 }
 
 function fillTable (oJsonData) {
   // add error checking to determine if json data is valid
 
-// var table (local)
+  // declare locally: var table = ...
   table = "\n  <table>\n";
   appendHeader();
-  counter = 0
+  var counter = 0
   $.each(oJsonData, function(index, bse) {
     if (counter == 20) {
       appendHeader();
@@ -55,7 +77,6 @@ function fillTable (oJsonData) {
 
   $("div#table").html(table);
 }
-
 
 function appendHeader () {
 // return string instead of appending
