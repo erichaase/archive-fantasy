@@ -3,6 +3,7 @@ require 'common'
 ################################################################################
 
 class RatingsController < ApplicationController
+=begin
   def index
     log(:debug, __method__)
     if params[:days]
@@ -12,7 +13,6 @@ class RatingsController < ApplicationController
       render :json => players
     end
   end
-
   def now
     log(:debug, __method__)
     date = activeToday
@@ -20,12 +20,22 @@ class RatingsController < ApplicationController
     players = getPlayers(date)
     render :json => players
   end
-
+=end
   def day
     log(:debug, __method__)
-    #params[:date]
+    d = params[:date]
+    date = Date.new(2000 + d[0,2].to_i, d[2,2].to_i, d[4,2].to_i)
+    players = getPlayers(date)
+    render :json => players
   end
 
+  def sync
+    log(:debug, __method__)
+    d = params[:date]
+    date = Date.new(2000 + d[0,2].to_i, d[2,2].to_i, d[4,2].to_i)
+    BoxScore.sync(date)
+    render :text => "synchronized #{date.to_s}"
+  end
 end
 
 ################################################################################

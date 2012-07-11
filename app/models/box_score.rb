@@ -60,8 +60,20 @@ boxscore entries:
         next if bs.final?
       end
 
-      re_status = %r`<\s*li\s+id\s*=\s*"\s*#{gid}-statusLine1\s*"[^>]+>\s*([^<]+)<\s*/\s*li\s*>\s*<\s*li[^>]+>\s*<\s*span\s+id\s*=\s*"\s*#{gid}-statusLine2Left\s*"[^>]*>\s*([^<]+)<\s*/\s*span\s*>\s*<\s*span\s+id\s*=\s*"\s*#{gid}-statusLine2Right\s*"[^>]+>\s*([^<]+)<\s*/\s*span\s*>`
-      open(scoreboardURI(date)).read.scan(re_status) do |status, quarter, time|
+      sb = open(scoreboardURI(date)).read
+
+      re_status = %r`\sid\s*=\s*"\s*#{gid}-statusLine1\s*"[^>]*>\s*([^<]+)`
+
+      sb.scan(re_status) do |status|
+        status = status[0]
+        quarter, time = '', ''
+
+# scan for statusLine2
+#sb.scan(re_status) do |status, quarter, time|
+#re_open  = '\s*<\s*[^>]+>\s*'
+#re_close = '\s*<\s*/\s*[^>]+>\s*'
+#%r`#{re_close}#{re_close}<\s*div\s+id\s*=\s*"\s*#{gid}-statusLine2\s*"[^>]*>(#{re_open})([^<]+)`
+
         [status, quarter, time].each do |x| x.strip!; x.downcase! end
 
         begin
