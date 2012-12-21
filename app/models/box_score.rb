@@ -58,9 +58,11 @@ boxscore entries:
       log(:debug, __method__, "gid = '#{gid}'")
 
       bs = BoxScore.where(:gid_espn => gid).first
+=begin
       if bs
         next if bs.final?
       end
+=end
 
       re_status = %r`\sid\s*=\s*"\s*#{gid}-statusLine1\s*"[^>]*>\s*([^<]+)`
       sb.scan(re_status) do |status|
