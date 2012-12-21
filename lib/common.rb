@@ -59,5 +59,5 @@ def log ( lvl, src, msg='' )
     msg = bred(msg)
   end
 
-  Rails.logger.send(lvl,msg)
+  puts msg
 end
