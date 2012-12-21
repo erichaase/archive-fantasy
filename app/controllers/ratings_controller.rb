@@ -72,7 +72,8 @@ class Player
     elsif status[2] =~ /&nbsp;/
       @bs_status = status[1]
     else
-      @bs_status = status[1,2].join(" (").concat(")")
+      #@bs_status = status[1,2].join(" (").concat(")")
+      @bs_status = status[0]
     end
 
     @pid_espn       = bse.pid_espn

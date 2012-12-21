@@ -52,6 +52,8 @@ boxscore entries:
     raise ArgumentError, "'date' argument is not a Date object" if date.class != Date
     log(:debug, __method__, "date = #{date}")
 
+    sb = open(scoreboardURI(date)).read
+
     gids(date).each do |gid|
       log(:debug, __method__, "gid = '#{gid}'")
 
@@ -60,10 +62,7 @@ boxscore entries:
         next if bs.final?
       end
 
-      sb = open(scoreboardURI(date)).read
-
       re_status = %r`\sid\s*=\s*"\s*#{gid}-statusLine1\s*"[^>]*>\s*([^<]+)`
-
       sb.scan(re_status) do |status|
         status = status[0]
         quarter, time = '', ''
@@ -99,6 +98,8 @@ boxscore entries:
             stats[0].sub!(%r`^\s*<\s*td[^>]*>\s*`,'')
             stats[-1].sub!(%r`\s*<\s*/\s*td\s*>\s*$`,'')
           end
+
+          log(:debug, __method__, "stats: name = #{name}, size = #{stats.size}, stats = #{stats}")
 
           [href, name, pos].concat(stats).each do |x| x.strip!; x.downcase! end
 

@@ -46,7 +46,7 @@ def log ( lvl, src, msg='' )
   raise ArgumentError, "'msg' argument is not a String object" if msg.class != String
 
   msg.insert(0, ": ") if not msg.empty?
-  msg.insert(0, "  #{DateTime.now.strftime('%Y-%m-%d|%H:%M:%S')}: #{lvl}: #{src}")
+  msg.insert(0, "  fantasy: #{DateTime.now.strftime('%Y-%m-%d|%H:%M:%S')}: #{lvl}: #{src}")
 
   case lvl
   when :debug, :info
