@@ -30,15 +30,16 @@ Fantasy::Application.configure do
   # Force all access to the app over SSL, use Strict-Transport-Security, and use secure cookies.
   # config.force_ssl = true
 
-  # See everything in the log (default is :info)
-  config.log_level = :debug
-
   # Prepend all log lines with the following tags
   # config.log_tags = [ :subdomain, :uuid ]
 
   # Use a different logger for distributed setups
   # config.logger = ActiveSupport::TaggedLogging.new(SyslogLogger.new)
   config.logger = Logger.new(STDOUT)
+  config.logger.level = Logger::DEBUG
+
+  # See everything in the log (default is :info)
+  config.log_level = :debug
 
   # Use a different cache store in production
   # config.cache_store = :mem_cache_store
