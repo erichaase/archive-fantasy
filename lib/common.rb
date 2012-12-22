@@ -1,4 +1,3 @@
-require 'open-uri'
 require 'date'
 
 def scoreboardURI ( date )
@@ -11,24 +10,6 @@ def boxscoreURI ( gid_espn )
   raise ArgumentError, "'gid_espn' argument is not a Fixnum object" if gid_espn.class != Fixnum
   log(:debug, __method__, "gid_espn = #{gid_espn}")
   return "http://scores.espn.go.com/nba/boxscore?gameId=#{gid_espn}"
-end
-
-def activeToday
-  log(:debug, __method__)
-  now = DateTime.now
-  day = Date.new(now.year, now.mon, now.mday)
-  day -= 1 while gids(day).empty?
-  return day
-end
-
-def gids ( date )
-  raise ArgumentError, "'date' argument is not a Date object" if date.class != Date
-  log(:debug, __method__, "date = #{date}")
-
-  ids = []
-  re_gid = %r`<\s*a\s+href\s*=\s*"\s*/nba/boxscore\?gameId=(\d+)\s*"[^>]*>\s*[Bb]ox\s*&nbsp\s*;\s*[Ss]core\s*<\s*/\s*a\s*>`
-  open(scoreboardURI(date)).read.scan(re_gid) do |gid| ids << gid[0].strip.to_i end
-  return ids
 end
 
 ################################################################################

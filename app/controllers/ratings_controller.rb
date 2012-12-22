@@ -9,13 +9,13 @@ class RatingsController < ApplicationController
     if params[:days]
     elsif params[:from] and params[:to]
     else
-      players = getPlayers(activeToday)
+      players = getPlayers(XactiveTodayX)
       render :json => players
     end
   end
   def now
     log(:debug, __method__)
-    date = activeToday
+    date = XactiveTodayX
     BoxScore.sync(date)
     players = getPlayers(date)
     render :json => players

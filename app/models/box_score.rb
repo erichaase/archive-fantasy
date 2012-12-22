@@ -48,13 +48,31 @@ boxscore entries:
 <tr align="right" class="odd player-46-1000"><td style="text-align:left;" nowrap><a href="http://espn.go.com/nba/player/_/id/1000/brendan-haywood">Brendan Haywood</a>, C</td><td>27</td><td>4-6</td><td>0-0</td><td>1-3</td><td>2</td><td>4</td><td>6</td><td>1</td><td>0</td><td>2</td><td>0</td><td>3</td><td>+20</td><td>9</td></tr>
 =end
 
-  def self.sync ( date )
-    raise ArgumentError, "'date' argument is not a Date object" if date.class != Date
-    log(:debug, __method__, "date = #{date}")
+  def self.sync ( date=nil )
 
-    sb = open(scoreboardURI(date)).read
+    re_gid = %r`<\s*a\s+href\s*=\s*"\s*/nba/boxscore\?gameId=(\d+)\s*"[^>]*>\s*[Bb]ox\s*&nbsp\s*;\s*[Ss]core\s*<\s*/\s*a\s*>`
 
-    gids(date).each do |gid|
+    # setup dates, gids and sb
+    gids = []
+    sb = nil
+    if date
+      raise ArgumentError, "'date' argument is not a Date object" if date.class != Date
+      sb = open(scoreboardURI(date)).read
+      sb.scan(re_gid) do |gid| gids << gid[0].strip.to_i end
+    else
+      now = DateTime.now
+      date = Date.new(now.year, now.mon, now.mday) + 1
+      while gids.empty?
+        date -= 1
+        sb = open(scoreboardURI(date)).read
+        sb.scan(re_gid) do |gid| gids << gid[0].strip.to_i end
+      end
+    end
+
+    log(:debug, __method__, "date = #{date}, gids = #{gids}")
+
+    gids.each do |gid|
+
       log(:debug, __method__, "gid = '#{gid}'")
 
       bs = BoxScore.where(:gid_espn => gid).first
