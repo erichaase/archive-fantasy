@@ -97,6 +97,7 @@ boxscore entries:
 
     bs = BoxScore.where(:gid_espn => gid).first
     if bs and bs.final?
+      log(:debug, __method__, "#{gid} box score is final, skipping")
       return unless force
     end
 
@@ -133,9 +134,22 @@ boxscore entries:
 
       log(:debug, __method__, "bs_yaml = \n#{{:gid => gid, :date => date, :bs_html => bs_html}.to_yaml}") if debug
 
+      headers = ''
+      bs_html.scan(RE[:headers]) do |full, single|
+        headers = full.split(%r`\s*<\s*/\s*th\s*>\s*<\s*th[^>]+>\s*`)
+        if headers.size > 1
+          headers[0].sub!(%r`^\s*<\s*th[^>]*>\s*`,'')
+          headers[-1].sub!(%r`\s*<\s*/\s*th\s*>\s*$`,'')
+        end
+        headers.each do |x| x.strip!; x.downcase! end
+        break
+      end
+
+      log(:debug, __method__, "headers: size = #{headers.size}, headers = #{headers}")
+
       bs_html.scan(RE[:player]) do | href, name, pos, rest |
         stats = rest.split(%r`\s*<\s*/\s*td\s*>\s*<\s*td[^>]*>\s*`)
-        if not stats.empty?
+        if stats.size > 1
           stats[0].sub!(%r`^\s*<\s*td[^>]*>\s*`,'')
           stats[-1].sub!(%r`\s*<\s*/\s*td\s*>\s*$`,'')
         end
