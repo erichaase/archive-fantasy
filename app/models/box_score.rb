@@ -156,7 +156,7 @@ boxscore entries:
 
         log(:debug, __method__, "stats: name = #{name}, size = #{stats.size}, stats = #{stats}")
 
-        log(:debug, __method__, "bs_yaml = \n#{{:gid => gid, :date => date, :bs_html => bs_html}.to_yaml}") if headers.size != stats.size and stats.size > 1
+        log(:debug, __method__, "bs_yaml = \n#{{:gid => gid, :date => date, :rest => rest}.to_yaml}") if headers.size != stats.size and stats.size > 1
 
         [href, name, pos].concat(stats).each do |x| x.strip!; x.downcase! end
 
@@ -186,17 +186,8 @@ boxscore entries:
           bse_attrs[:fta]      = stats[3][/\d+$/].to_i
           bse_attrs[:oreb]     = stats[4].to_i
 
-          case stats.size
-          when 14
-            bse_attrs[:reb]       = stats[6].to_i
-            bse_attrs[:ast]       = stats[7].to_i
-            bse_attrs[:stl]       = stats[8].to_i
-            bse_attrs[:blk]       = stats[9].to_i
-            bse_attrs[:to]        = stats[10].to_i
-            bse_attrs[:pf]        = stats[11].to_i
-            bse_attrs[:plusminus] = stats[12].to_i
-            bse_attrs[:pts]       = stats[13].to_i
-          when 13
+          case headers[5]
+          when 'reb'
             bse_attrs[:reb]       = stats[5].to_i
             bse_attrs[:ast]       = stats[6].to_i
             bse_attrs[:stl]       = stats[7].to_i
@@ -205,6 +196,30 @@ boxscore entries:
             bse_attrs[:pf]        = stats[10].to_i
             bse_attrs[:plusminus] = stats[11].to_i
             bse_attrs[:pts]       = stats[12].to_i
+          when 'dreb'
+            case stats.size
+            when 13
+              bse_attrs[:reb]       = stats[6].to_i
+              bse_attrs[:ast]       = stats[7].to_i
+              bse_attrs[:stl]       = stats[8].to_i
+              bse_attrs[:blk]       = stats[9].to_i
+              bse_attrs[:to]        = stats[10].to_i
+              bse_attrs[:pf]        = stats[11].to_i
+              bse_attrs[:plusminus] = 0
+              bse_attrs[:pts]       = stats[12].to_i
+            when 14
+              bse_attrs[:reb]       = stats[6].to_i
+              bse_attrs[:ast]       = stats[7].to_i
+              bse_attrs[:stl]       = stats[8].to_i
+              bse_attrs[:blk]       = stats[9].to_i
+              bse_attrs[:to]        = stats[10].to_i
+              bse_attrs[:pf]        = stats[11].to_i
+              bse_attrs[:plusminus] = stats[12].to_i
+              bse_attrs[:pts]       = stats[13].to_i
+            end
+          else
+            log(:warn, __method__, "headers[5] = #{headers[5]}, should be either 'reb' or 'dreb': #{name}, #{stats.inspect}")
+            next
           end
         else
           log(:warn, __method__, "stats.size = #{stats.size}, should be 1|13|14: #{name}, #{stats.inspect}")
