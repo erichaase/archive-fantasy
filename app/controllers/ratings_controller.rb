@@ -29,11 +29,11 @@ class RatingsController < ApplicationController
     render :json => players
   end
 
-  def sync
+  def syncDay
     log(:debug, __method__)
     d = params[:date]
     date = Date.new(2000 + d[0,2].to_i, d[2,2].to_i, d[4,2].to_i)
-    BoxScore.sync(date)
+    BoxScore.syncDay(date)
     render :text => "synchronized #{date.to_s}"
   end
 end

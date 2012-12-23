@@ -7,8 +7,8 @@ Fantasy::Application.routes.draw do
   #get   'ratings/now'
   #match 'ratings'       => 'ratings#index', :via => :get
 
-  match 'ratings/:date' => 'ratings#day',   :via => :get, :date => /\d{6}/
-  match 'sync/:date'    => 'ratings#sync',  :via => :get, :date => /\d{6}/
+  match 'ratings/:date' => 'ratings#day',     :via => :get, :date => /\d{6}/
+  match 'sync/:date'    => 'ratings#syncDay', :via => :get, :date => /\d{6}/
 
   # The priority is based upon order of creation:
   # first created -> highest priority.
