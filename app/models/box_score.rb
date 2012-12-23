@@ -156,7 +156,7 @@ boxscore entries:
 
         log(:debug, __method__, "stats: name = #{name}, size = #{stats.size}, stats = #{stats}")
 
-        log(:debug, __method__, "bs_yaml = \n#{{:gid => gid, :date => date, :bs_html => bs_html}.to_yaml}") if headers.size != stats.size
+        log(:debug, __method__, "bs_yaml = \n#{{:gid => gid, :date => date, :bs_html => bs_html}.to_yaml}") if headers.size != stats.size and stats.size > 1
 
         [href, name, pos].concat(stats).each do |x| x.strip!; x.downcase! end
 
