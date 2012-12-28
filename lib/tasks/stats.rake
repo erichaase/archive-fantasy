@@ -1,4 +1,5 @@
 require 'common'
+require 'yaml'
 
 namespace :stats do
   desc "Retrieve a particular box score and print debugging information"
@@ -20,6 +21,6 @@ namespace :stats do
 
     BoxScore.syncGame(:gid => gid, :date => date, :force => force, :debug => debug)
 
-    Notifier.error(:subject => "syncGame completed!", :body => {:gid => gid, :date => date, :force => force, :debug => debug}).deliver
+    Notifier.error(:subject => "syncGame completed!", :body => {:gid => gid, :date => date, :force => force, :debug => debug}.to_yaml).deliver
   end
 end
