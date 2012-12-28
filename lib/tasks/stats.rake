@@ -19,5 +19,7 @@ namespace :stats do
     debug = args[:debug] == "1" ? true : false
 
     BoxScore.syncGame(:gid => gid, :date => date, :force => force, :debug => debug)
+
+    Notifier.error(:subject => "syncGame completed!", :body => {:gid => gid, :date => date, :force => force, :debug => debug}).deliver
   end
 end

@@ -63,6 +63,7 @@ boxscore entries:
         date -= 1
         sb_html = open(scoreboardURI(date)).read
         sb_html.scan(RE[:gid]) do |gid| gids << gid[0].strip.to_i end
+        sleep 1
       end
     end
 
@@ -87,6 +88,7 @@ boxscore entries:
       sb_html = args[:sb_html]
     else
       sb_html = open(scoreboardURI(date)).read
+      sleep 1
     end
 
     force = args.has_key?(:force) && args[:force] ? true : false
@@ -133,6 +135,7 @@ boxscore entries:
       end
 
       bs_html = open(boxscoreURI(bs.gid_espn)).read
+      sleep 1
 
       log(:debug, __method__, "bs_yaml = \n#{{:gid => gid, :date => date, :bs_html => bs_html}.to_yaml}") if debug
 
