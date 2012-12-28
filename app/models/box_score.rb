@@ -97,8 +97,10 @@ boxscore entries:
 
     bs = BoxScore.where(:gid_espn => gid).first
     if bs and bs.final?
-      log(:debug, __method__, "#{gid} box score is final, skipping")
-      return unless force
+      unless force
+        log(:debug, __method__, "#{gid} box score is final, skipping")
+        return
+      end
     end
 
     re_status = %r`\sid\s*=\s*"\s*#{gid}-statusLine1\s*"[^>]*>\s*([^<]+)`

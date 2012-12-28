@@ -1,15 +1,6 @@
 require 'common'
 
 namespace :stats do
-
-  desc "Retrieve most recent day's box score entries and stores them in database"
-  task :syncDay => :environment do
-    now = DateTime.now
-    if (now.min >= 10 && now.min < 20) || (now.min >= 40 && now.min < 50)
-      BoxScore.syncDay
-    end
-  end
-
   desc "Retrieve a particular box score and print debugging information"
   task :syncGame, [:gid, :date, :force, :debug] => [:environment] do |t, args|
     raise ArgumentError, "'gid' argument not passed"   unless args.to_hash.has_key?(:gid)
@@ -29,5 +20,4 @@ namespace :stats do
 
     BoxScore.syncGame(:gid => gid, :date => date, :force => force, :debug => debug)
   end
-
 end
