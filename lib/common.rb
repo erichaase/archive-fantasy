@@ -20,8 +20,9 @@ end
 ################################################################################
 
 def colorize ( text, color_code ); "#{color_code}#{text}\033[0m";  end
+def purple   ( text );             colorize(text,"\033[0;35;40m"); end
+def teal     ( text );             colorize(text,"\033[0;36;40m"); end
 def green    ( text );             colorize(text,"\033[0;32;40m"); end
-def bgreen   ( text );             colorize(text,"\033[1;32;40m"); end
 def yellow   ( text );             colorize(text,"\033[0;33;40m"); end
 def red      ( text );             colorize(text,"\033[0;31;40m"); end
 def bred     ( text );             colorize(text,"\033[1;31;40m"); end
@@ -35,7 +36,9 @@ def log ( lvl, src, msg='' )
   msg.insert(0, "fantasy: #{DateTime.now.strftime('%Y-%m-%d|%H:%M:%S')}: #{lvl}: #{src}")
 
   case lvl
-  when :debug, :info
+  when :debug
+    msg = teal(msg)
+  when :info
     msg = green(msg)
   when :warn
     msg = yellow(msg)

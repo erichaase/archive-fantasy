@@ -21,6 +21,7 @@ namespace :stats do
 
     BoxScore.syncGame(:gid => gid, :date => date, :force => force, :debug => debug)
 
-    Notifier.error(:subject => "syncGame completed!", :body => {:gid => gid, :date => date, :force => force, :debug => debug}.to_yaml).deliver
+    body = {:gid => gid, :date => date, :force => force, :debug => debug}.to_yaml
+    Notifier.error(:subject => "syncGame completed!", :body => body).deliver
   end
 end

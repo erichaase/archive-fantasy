@@ -1,7 +1,7 @@
 class Notifier < ActionMailer::Base
 
-  default from: 'Eric Haase <erichaase.heroku@gmail.com>',
-          to:   'Eric Haase <erichaase@gmail.com>'
+  default from: "NBA Fantasy App <#{ENV['GMAIL_SMTP_USER']}>",
+          to:   "#{ENV['NOTIFIER_TO']}"
 
   def error ( args )
     raise ArgumentError, %q`'args' argument is not a Hash object`      unless args.class == Hash
@@ -12,7 +12,7 @@ class Notifier < ActionMailer::Base
 
     @body = args[:body]
 
-    mail(:subject => "NBA Fantasy App Error: #{args[:subject]}")
+    mail(:subject => "Error: #{args[:subject]}")
   end
 
 end
