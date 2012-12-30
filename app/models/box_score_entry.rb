@@ -28,10 +28,6 @@ class BoxScoreEntry < ActiveRecord::Base
     bse.status.strip!
   end
 
-  after_save do |bse|
-    log(:debug, __method__, "saved bse: #{bse}")
-  end
-
   def play?
     status == 'play'
   end

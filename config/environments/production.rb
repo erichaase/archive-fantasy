@@ -37,6 +37,7 @@ Fantasy::Application.configure do
   # config.logger = ActiveSupport::TaggedLogging.new(SyslogLogger.new)
   config.logger = Logger.new(STDOUT)
   config.logger.level = Logger::DEBUG
+  config.action_controller.logger = Logger.new(STDOUT)
 
   # See everything in the log (default is :info)
   config.log_level = :debug

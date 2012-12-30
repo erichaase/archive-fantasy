@@ -44,3 +44,5 @@ gem 'jquery-ui-rails', '1.0.0'
 
 # To use debugger
 # gem 'debugger'
+
+gem 'newrelic_rpm'

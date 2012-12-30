@@ -21,19 +21,20 @@ class RatingsController < ApplicationController
     render :json => players
   end
 =end
+
   def day
-    log(:debug, __method__)
     d = params[:date]
     date = Date.new(2000 + d[0,2].to_i, d[2,2].to_i, d[4,2].to_i)
+    log(:info, __method__, :date => date)
     players = getPlayers(date)
     render :json => players
   end
 
   def syncDay
-    log(:debug, __method__)
     d = params[:date]
     date = Date.new(2000 + d[0,2].to_i, d[2,2].to_i, d[4,2].to_i)
-    BoxScore.syncDay(date)
+    log(:info, __method__, :date => date)
+    BoxScore.syncDay(:date => date)
     render :text => "synchronized #{date.to_s}"
   end
 end
@@ -41,7 +42,7 @@ end
 ################################################################################
 
 def getPlayers ( date )
-  raise ArgumentError, "'date' argument is not a Date object" if date.class != Date
+  raise ArgumentError, %q`'date' argument is not a Date object` unless date.class == Date
   log(:debug, __method__, "date = #{date}")
 
   players = []
