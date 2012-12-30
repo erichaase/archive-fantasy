@@ -40,7 +40,7 @@ Fantasy::Application.configure do
   # config.action_controller.logger = Logger.new(STDOUT)
 
   # See everything in the log (default is :info)
-  config.log_level = :debug
+  # config.log_level = :debug
 
   # Use a different cache store in production
   # config.cache_store = :mem_cache_store
