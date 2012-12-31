@@ -39,7 +39,7 @@ def log ( lvl, src, data='' )
   when String
     msg = data
   when Hash
-    if ENV.has_key?("DEBUG")
+    if lvl == :debug && ENV.has_key?("DEBUG")
       msg = "yaml = \n#{data.to_yaml}"
     else
       msg = "#{data}"

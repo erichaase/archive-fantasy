@@ -45,10 +45,8 @@ class BoxScore < ActiveRecord::Base
     end
 
     # log variables
-    vars = { :date => date, :gids => gids }
-    log(:info, __method__, vars)
-    vars[:sb_html] = sb_html
-    log(:debug, __method__, vars)
+    log(:info,  __method__, { :date => date, :gids => gids })
+    log(:debug, __method__, { :date => date, :gids => gids, :sb_html => sb_html })
 
     # syncGame() each game
     gids.each do |gid|
@@ -66,7 +64,7 @@ class BoxScore < ActiveRecord::Base
 
     # don't process final box scores
     if bs and bs.final? and not ENV.has_key?("FORCE")
-      log(:info, __method__, "skipping box score #{gid} because its final")
+      log(:info, __method__, "skipping box score #{gid} because it is final")
       return
     end
 
@@ -225,7 +223,7 @@ RE[:close] = '\s*<\s*/\s*[^>]+>\s*'
         log(:error, __method__, "#{e.message}: #{bse_attrs.inspect}")
         next
       end
-      log(:info, __method__, { :fname => bse_attrs[:fname], :lname => bse_attrs[:lname], :stats_size => stats.size })
+      log(:info,  __method__, {:fname => bse_attrs[:fname], :lname => bse_attrs[:lname], :stats_size => stats.size})
       log(:debug, __method__, {:bse => bse})
 
       # add BoxScoreEntry to Player model using p_attrs
