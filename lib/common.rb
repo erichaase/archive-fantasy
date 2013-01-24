@@ -1,24 +1,47 @@
-require 'date'
 require 'open-uri'
+require 'date'
 require 'yaml'
 
-RE = {}
-RE[:gid]     = %r`<\s*a\s+href\s*=\s*"\s*/nba/boxscore\?gameId=(\d+)\s*"[^>]*>\s*[Bb]ox\s*&nbsp\s*;\s*[Ss]core\s*<\s*/\s*a\s*>`
-RE[:date]    = %r`scoreboard\?date=(\d+)`
-RE[:headers] = %r`<\s*th[^>]*>\s*STARTERS\s*<\s*/\s*th\s*>((\s*<\s*th[^>]*>\s*[^<]+<\s*/\s*th\s*>)+)`
-RE[:player]  = %r`<\s*a\s+href\s*=\s*"([^"]+)"\s*>\s*([^<]+)<[^>]+>\s*,\s*([^<]+)<[^<]+((<\s*td[^>]*>[^<]+<\s*/\s*td\s*>\s*)+)`
+##################################### ARGS #####################################
 
-def scoreboardURI ( date )
-  raise ArgumentError, %q`'date' argument is not a Date object` unless date.class == Date
-  return "http://scores.espn.go.com/nba/scoreboard?date=#{date.strftime('%Y%m%d')}"
+def verify_var ( arg, type )
+  raise ArgumentError, %Q`'#{arg}' argument isn't a #{type}: #{arg.class}` unless arg.class == type
 end
 
-def boxscoreURI ( gid_espn )
-  raise ArgumentError, %q`'gid_espn' argument is not a Fixnum object` unless gid_espn.class == Fixnum
-  return "http://scores.espn.go.com/nba/boxscore?gameId=#{gid_espn}"
+def verify_hash ( args )
+  verify_var(args, Hash)
+  raise ArgumentError, %Q`required 'args' argument is missing from 'args'` unless args.has_key?(:args)
+  verify_var(args[:args], Hash)
+
+  # verify required arguments
+  if args.has_key?(:required)
+    required = args[:required]
+    verify_var(required, Hash)
+
+    required.each_pair do |k, v|
+      verify_var(k, Symbol)
+      verify_var(v, Class)
+      raise ArgumentError, %Q`required '#{k}' argument is missing from 'args'` unless args[:args].has_key?(k)
+      verify_var(args[:args][k], v)
+    end
+  end
+
+  # verify optional arguments
+  if args.has_key?(:optional)
+    optional = args[:optional]
+    verify_var(optional, Hash)
+
+    optional.each_pair do |k, v|
+      verify_var(k, Symbol)
+      verify_var(v, Class)
+      if args[:args].has_key?(k)
+        verify_var(args[:args][k], v)
+      end
+    end
+  end
 end
 
-################################################################################
+################################### LOGGING ###################################
 
 def colorize ( text, color_code ); "#{color_code}#{text}\033[0m";  end
 def purple   ( text );             colorize(text,"\033[0;35;40m"); end
@@ -28,28 +51,33 @@ def yellow   ( text );             colorize(text,"\033[0;33;40m"); end
 def red      ( text );             colorize(text,"\033[0;31;40m"); end
 def bred     ( text );             colorize(text,"\033[1;31;40m"); end
 
-def log ( lvl, src, data='' )
-  raise ArgumentError, %q`'lvl' argument is not a Symbol object` unless lvl.class == Symbol
-  raise ArgumentError, %q`'src' argument is not a Symbol object` unless src.class == Symbol
+LOG_LEVELS = { :debug => 0, :info  => 1, :warn  => 2, :error => 3, :fatal => 4 }
 
-  return if ((lvl == :debug) && (not ENV.has_key?("DEBUG")))
+def log ( lvl, src, data='' )
+  verify_var(lvl, Symbol)
+  verify_var(src, Symbol)
+
+  # get and set default levels
+  log_lvl = ENV.has_key?("LOG_LVL") ? ENV["LOG_LVL"].to_sym : :info
+  log_lvl = :info unless LOG_LEVELS.keys.include?(log_lvl)
+  lvl     = :info unless LOG_LEVELS.keys.include?(lvl)
+
+  # only log if lvl >= log_lvl
+  return if LOG_LEVELS[lvl] < LOG_LEVELS[log_lvl]
 
   # build msg string based on 'data' argument
   case data
   when String
     msg = data
   when Hash
-    if lvl == :debug && ENV.has_key?("DEBUG")
-      msg = "yaml = \n#{data.to_yaml}"
-    else
-      msg = "#{data}"
-    end
+    msg = "#{data}"
+    #msg = "#{data.to_yaml}" if ENV.has_key?("DEBUG") && ENV["DEBUG"] == "yaml"
   else
-    raise ArgumentError, %q`'data' argument is not a String or Hash object`
+    raise ArgumentError, %Q`'data' argument isn't a String or Hash: #{data.class}`
   end
 
   msg.insert(0, ": ") unless msg.empty?
-  msg.insert(0, "fantasy: #{DateTime.now.strftime('%Y-%m-%d|%H:%M:%S')}: #{lvl}: #{src}")
+  msg.insert(0, "#{DateTime.now.strftime('%Y-%m-%d %H:%M:%S')}: fantasy: #{lvl}: #{src}")
 
   case lvl
   when :debug
@@ -65,4 +93,17 @@ def log ( lvl, src, data='' )
   end
 
   puts msg
+end
+
+##################################### MISC #####################################
+
+def readurl ( url )
+  log(:debug, __method__, :url => url)
+  verify_var(url, String)
+  data = open(url).read
+  sleep 1
+  # store_s3("sb/date-timestamp.html", sb_html)
+  # store_s3("bs/gid-timestamp.json", json)
+  # store_s3("bs/gid-timestamp.html", bs_html)
+  return data
 end

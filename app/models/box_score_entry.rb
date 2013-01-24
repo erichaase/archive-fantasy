@@ -32,4 +32,15 @@ class BoxScoreEntry < ActiveRecord::Base
     status == 'play'
   end
 
+  def to_s
+    case status
+    when 'play'
+      return sprintf("bse: %d: [%s %s %d] [%d-%d %d-%d %d-%d] [%d-%d-%d-%d-%d-%d] [%d %d]",
+        pid_espn, fname, lname, min, fgm, fga, ftm, fta, tpm, tpa, pts, reb, ast, stl, blk, to, pf, plusminus )
+    when 'dnp'
+      return sprintf("bse: %d: [%s %s %s]", pid_espn, fname, lname, status)
+    else
+      log(:error, __method__, :pid_espn => pid_espn, :fname => fname, :lname => lname, :status => status)
+    end
+  end
 end
