@@ -10,7 +10,7 @@ namespace :cron do
     min = now.min
     if (min >= 0 && min < 10) || (min >= 15 && min < 25) || (min >= 30 && min < 40) || (min >= 45 && min < 55)
       sb = Sync::Scoreboard.new
-      log(:debug, __method__, sb.to_yaml)
+      log(:debug, :ten_min, sb.to_yaml)
       sb.save
     end
   end
