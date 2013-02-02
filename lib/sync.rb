@@ -15,7 +15,7 @@ module Sync
     SB_URI  = "http://scores.espn.go.com/nba/scoreboard?date=%s"
 
     def initialize ( opts = {} )
-      log(:debug, __method__, opts)
+      log(:debug, __method__, :opts => opts)
       verify_hash(:args => opts, :optional => {:date => Date})
 
       if opts.has_key?(:date)
@@ -104,7 +104,6 @@ module Sync
       team_home = c['home']['abbrev'].strip.downcase
       team_away = c['away']['abbrev'].strip.downcase
 
-      log(:debug, __method__, :status => status, :team_home => team_home, :team_away => team_away)
       return status, team_home, team_away
     end
 
@@ -130,7 +129,6 @@ module Sync
 
       if p['minutes'][/^-$|^0$/]
         bse[:status] = 'dnp'
-        log(:debug, __method__, :bse => bse)
         return bse
       end
 
@@ -152,7 +150,6 @@ module Sync
       bse[:pts]       = p['points'].to_i          # '12|-'
       bse[:oreb]      = 0
 
-      log(:debug, __method__, :bse => bse)
       return bse
     end
 
@@ -184,6 +181,7 @@ module Sync
         return
       end
 
+      log(:debug, __method__, :bs => @bs)
       log(:info, __method__, @bs.to_s)
 
       (@bses_home + @bses_away).each do |a|
@@ -200,6 +198,7 @@ module Sync
           next
         end
 
+        log(:debug, __method__, :bse => bse)
         log(:info, __method__, bse.to_s)
       end
 

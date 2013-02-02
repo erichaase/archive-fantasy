@@ -1,6 +1,7 @@
-<input type="text" id="datepicker" size="6" readonly />
-<button type="button" id="sync">sync</button>
-<button type="button" id="update">update</button>
-<br />
-<textarea id="status" rows="5" cols="50" readonly></textarea>
-<div id="table"></div>
+<div data-role="page">
+  <div data-role="collapsible-set" data-iconpos="right">
+<% @bses.each do |bse| %>
+<%=raw bse.to_html %>
+<% end %>
+  </div>
+</div>

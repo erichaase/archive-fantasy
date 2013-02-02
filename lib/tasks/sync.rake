@@ -13,7 +13,7 @@ namespace :sync do
     date = Date.new(2000 + d[0,2].to_i, d[2,2].to_i, d[4,2].to_i)
 
     sb = Sync::Scoreboard.new(:date => date)
-    log(:debug, :sync_day, sb.to_yaml)
+    # store_s3("xxx", sb.to_yaml)
     sb.save
   end
 
@@ -26,7 +26,7 @@ namespace :sync do
     gid = args[:gid].to_i
 
     bs = Sync::Boxscore.new(gid)
-    log(:debug, :sync_game, bs.to_yaml)
+    # store_s3("xxx", bs.to_yaml)
     bs.save
 
   end

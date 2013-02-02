@@ -32,6 +32,35 @@ class BoxScoreEntry < ActiveRecord::Base
     status == 'play'
   end
 
+  def ratings
+    return Nil if not play?
+
+    r = {}
+
+    if fga == 0
+      r[:fgp] = 0.0
+    else
+      r[:fgp] = (((fgm.to_f / fga.to_f) - 0.47) * (fga / 22.8181818181818)) * 55.0266638166801
+    end
+
+    if fta == 0
+      r[:ftp] = 0.0
+    else
+      r[:ftp] = (((ftm.to_f / fta.to_f) - 0.769) * (fta / 10.4901960784314)) * 25.5465168615693
+    end
+
+    r[:tpm] = (tpm - 0.9) * 3.33333333333333
+    r[:pts] = (pts - 16.6) * 0.316872427983539
+    r[:reb] = (reb - 6.0) * 0.779487179487179
+    r[:ast] = (ast - 3.65) * 0.85972850678733
+    r[:stl] = (stl - 1.1) * 4.66666666666667
+    r[:blk] = (blk - 0.7) * 3.01724137931034
+    r[:to]  = (to - 2.08) * -2.36111111111111
+    r[:total] = r[:fgp] + r[:ftp] + r[:tpm] + r[:pts] + r[:reb] + r[:ast] + r[:stl] + r[:blk] + r[:to]
+
+    return r
+  end
+
   def to_s
     case status
     when 'play'
@@ -43,4 +72,43 @@ class BoxScoreEntry < ActiveRecord::Base
       log(:error, __method__, :pid_espn => pid_espn, :fname => fname, :lname => lname, :status => status)
     end
   end
+
+  def to_html
+    return '' if not play?
+
+    fn = fname[0].capitalize + fname[1,fname.size-1]
+    ln = lname[0].capitalize + lname[1,lname.size-1]
+    name = "#{fn} #{ln}"
+
+    p = [2798, 3028, 1015, 3983, 1781, 3005, 2772, 3206, 6631, 3243, 6580, 165, 4232]
+    if p.include? pid_espn
+      dt = "e"
+    elsif ratings[:total] >= 5
+      dt = "b"
+    else
+      dt = "a"
+    end
+
+    bs = box_score
+    min_bs = bs.min
+    gid = bs.gid_espn
+
+    return <<END
+    <div data-role="collapsible" data-theme="#{dt}" data-collapsed-icon="minus" data-expanded-icon="minus">
+      <h2>#{name} [#{ratings[:total].to_i}] [#{min}/#{min_bs}]</h2>
+      <ul data-role="listview" data-theme="c">
+        <li>#{fgm}-#{fga} FG, #{ftm}-#{fta} FT, #{tpm} 3PT</li>
+        <li>#{pts} PTS, #{reb} REB, #{ast} AST</li>
+        <li>#{stl} STL, #{blk} BLK, #{to} TO</li>
+        <li><a href="#">Add Player</a></li>
+        <li><a href="#">Profile</a></li>
+        <li><a target="_blank" href="http://espn.go.com/nba/player/gamelog/_/id/#{pid_espn}/">Game Log</a></li>
+        <li><a target="_blank" href="http://scores.espn.go.com/nba/boxscore?gameId=#{gid}">Box Score</a></li>
+        <li><a href="#">Depth Chart</a></li>
+        <li><a target="_blank" href="http://www.rotoworld.com/content/playersearch.aspx?searchname=#{lname},%20#{fname}">Rotoworld</a></li>
+      </ul>
+    </div>
+END
+  end
+
 end
