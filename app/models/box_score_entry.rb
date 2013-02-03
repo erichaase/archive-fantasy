@@ -98,7 +98,6 @@ class BoxScoreEntry < ActiveRecord::Base
     <div data-role="collapsible" data-theme="#{dt}" data-collapsed-icon="minus" data-expanded-icon="minus">
       <h2>#{name} [#{min}/#{min_bs}, #{ratings[:total].to_i}]</h2>
       <ul data-role="listview" data-theme="c">
-        <li>FG FT 3P, PTS-REB-AST, STL-BLK-TO</li>
         <li>#{fgm}-#{fga} #{ftm}-#{fta} #{tpm}-#{tpa}, #{pts}-#{reb}-#{ast}, #{stl}-#{blk}-#{to}</li>
         <li><a href="#">Add/Remove Player</a></li>
         <li><a href="#">Profile</a></li>
