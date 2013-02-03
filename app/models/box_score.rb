@@ -39,8 +39,32 @@ class BoxScore < ActiveRecord::Base
         return 48
       end
     else
-      #@bs_status = status[1,2].join(" (").concat(")")
-      return -1
+      log(:warn, __method__, "game isn't final or live: #{status}") if not s[0][/live/]
+
+      case s[2]
+      when /:/
+        mleft = 12 - s[2].split(":")[0].to_i
+      when /\d*\.\d*/
+        mleft = 12
+      else
+        mleft = 0
+      end
+
+      case s[1]
+      when /1st/
+        return mleft
+      when /2nd/
+        return 12 + mleft
+      when /3rd/
+        return 24 + mleft
+      when /4th/
+        return 36 + mleft
+      when /halftime/
+        return 24
+      # ot
+      else
+        return -1
+      end
     end
 
   end

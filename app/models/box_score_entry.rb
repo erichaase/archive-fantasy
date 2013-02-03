@@ -33,6 +33,8 @@ class BoxScoreEntry < ActiveRecord::Base
   end
 
   def ratings
+    log(:debug, __method__, :bse => self)
+
     return Nil if not play?
 
     r = {}
@@ -74,13 +76,16 @@ class BoxScoreEntry < ActiveRecord::Base
   end
 
   def to_html
+    log(:debug, __method__, :bse => self)
+
     return '' if not play?
 
     fn = fname[0].capitalize + fname[1,fname.size-1]
     ln = lname[0].capitalize + lname[1,lname.size-1]
     name = "#{fn} #{ln}"
 
-    p = [2798, 3028, 1015, 3983, 1781, 3005, 2772, 3206, 6631, 3243, 6580, 165, 4232]
+    p = ENV.has_key?("PLAYERS") ? ENV["PLAYERS"] : ""
+    p = p.split(/\s*,\s*/).map { |x| x.to_i }
     if p.include? pid_espn
       dt = "e"
     elsif ratings[:total] >= 5
