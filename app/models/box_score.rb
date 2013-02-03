@@ -61,6 +61,13 @@ class BoxScore < ActiveRecord::Base
         return 36 + mleft
       when /halftime/
         return 24
+      when /^\s*end/
+        q = s[2][/^\s*\d+/]
+        if q
+          return 12 * q.to_i
+        else
+          return -2
+        end
       # ot
       else
         return -1

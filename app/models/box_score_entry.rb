@@ -33,7 +33,7 @@ class BoxScoreEntry < ActiveRecord::Base
   end
 
   def ratings
-    log(:debug, __method__, :bse => self)
+    log(:debug, __method__)
 
     return Nil if not play?
 
@@ -76,7 +76,7 @@ class BoxScoreEntry < ActiveRecord::Base
   end
 
   def to_html
-    log(:debug, __method__, :bse => self)
+    log(:debug, __method__)
 
     return '' if not play?
 
