@@ -33,8 +33,6 @@ class BoxScoreEntry < ActiveRecord::Base
   end
 
   def ratings
-    log(:debug, __method__)
-
     return Nil if not play?
 
     r = {}
@@ -76,8 +74,6 @@ class BoxScoreEntry < ActiveRecord::Base
   end
 
   def to_html
-    log(:debug, __method__)
-
     return '' if not play?
 
     fn = fname[0].capitalize + fname[1,fname.size-1]

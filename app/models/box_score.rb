@@ -24,8 +24,6 @@ class BoxScore < ActiveRecord::Base
   end
 
   def min
-    log(:debug, __method__, :status => status)
-
     s = status.split(",")
     if final?
       if s.size > 2 && s[2].strip.downcase =~ /ot/
