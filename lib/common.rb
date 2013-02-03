@@ -107,3 +107,9 @@ def readurl ( url )
   # store_s3("bs/gid-timestamp.html", bs_html)
   return data
 end
+
+=begin
+send email:
+body = {:gid => gid}.to_yaml
+Notifier.error(:subject => "sync_game completed!", :body => body).deliver
+=end

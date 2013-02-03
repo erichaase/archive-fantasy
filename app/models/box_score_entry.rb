@@ -67,7 +67,7 @@ class BoxScoreEntry < ActiveRecord::Base
       return sprintf("bse: %d: [%s %s %d] [%d-%d %d-%d %d-%d] [%d-%d-%d-%d-%d-%d] [%d %d]",
         pid_espn, fname, lname, min, fgm, fga, ftm, fta, tpm, tpa, pts, reb, ast, stl, blk, to, pf, plusminus )
     when 'dnp'
-      return sprintf("bse: %d: [%s %s %s]", pid_espn, fname, lname, status)
+      return sprintf("bse: %d: [%s %s]", pid_espn, fname, lname)
     else
       log(:error, __method__, :pid_espn => pid_espn, :fname => fname, :lname => lname, :status => status)
     end
@@ -96,13 +96,13 @@ class BoxScoreEntry < ActiveRecord::Base
 
     return <<END
     <div data-role="collapsible" data-theme="#{dt}" data-collapsed-icon="minus" data-expanded-icon="minus">
-      <h2>#{name} [#{ratings[:total].to_i}] [#{min}/#{min_bs}]</h2>
+      <h2>#{name} [#{min}/#{min_bs}, #{ratings[:total].to_i}]</h2>
       <ul data-role="listview" data-theme="c">
-        <li>#{fgm}-#{fga} FG, #{ftm}-#{fta} FT, #{tpm} 3PT</li>
-        <li>#{pts} PTS, #{reb} REB, #{ast} AST</li>
-        <li>#{stl} STL, #{blk} BLK, #{to} TO</li>
-        <li><a href="#">Add Player</a></li>
+        <li>FG FT 3P, PTS-REB-AST, STL-BLK-TO</li>
+        <li>#{fgm}-#{fga} #{ftm}-#{fta} #{tpm}-#{tpa}, #{pts}-#{reb}-#{ast}, #{stl}-#{blk}-#{to}</li>
+        <li><a href="#">Add/Remove Player</a></li>
         <li><a href="#">Profile</a></li>
+        <li><a target="_blank" href="http://basketball.fantasysports.yahoo.com/nba/67237/playersearch?&search=#{fname}%20#{lname}">Yahoo Player Search</a></li>
         <li><a target="_blank" href="http://espn.go.com/nba/player/gamelog/_/id/#{pid_espn}/">Game Log</a></li>
         <li><a target="_blank" href="http://scores.espn.go.com/nba/boxscore?gameId=#{gid}">Box Score</a></li>
         <li><a href="#">Depth Chart</a></li>

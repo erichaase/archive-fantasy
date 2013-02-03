@@ -1,6 +1,9 @@
 Fantasy::Application.routes.draw do
   root :to => 'home#index'
 
+  resources :box_scores
+  resources :box_score_entries
+
   # resources :roster
 
   # The priority is based upon order of creation:

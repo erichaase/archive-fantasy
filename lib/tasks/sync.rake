@@ -32,9 +32,3 @@ namespace :sync do
   end
 
 end
-
-=begin
-send email:
-body = {:gid => gid}.to_yaml
-Notifier.error(:subject => "sync_game completed!", :body => body).deliver
-=end
