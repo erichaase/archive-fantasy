@@ -64,10 +64,12 @@ class BoxScore < ActiveRecord::Base
         if q
           return 12 * q.to_i
         else
+          log(:error, __method__, "status not parsed (-2): #{status}")
           return -2
         end
       # ot
       else
+        log(:error, __method__, "status not parsed (-1): #{status}")
         return -1
       end
     end

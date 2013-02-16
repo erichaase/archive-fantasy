@@ -43,13 +43,16 @@ end
 
 ################################### LOGGING ###################################
 
+
 def colorize ( text, color_code ); "#{color_code}#{text}\033[0m";  end
-def purple   ( text );             colorize(text,"\033[0;35;40m"); end
-def teal     ( text );             colorize(text,"\033[0;36;40m"); end
-def green    ( text );             colorize(text,"\033[0;32;40m"); end
-def yellow   ( text );             colorize(text,"\033[0;33;40m"); end
-def red      ( text );             colorize(text,"\033[0;31;40m"); end
-def bred     ( text );             colorize(text,"\033[1;31;40m"); end
+def yellow   ( text );             colorize(text,"\033[0;33m"); end
+def orange   ( text );             colorize(text,"\033[1;31m"); end
+def red      ( text );             colorize(text,"\033[0;31m"); end
+def magenta  ( text );             colorize(text,"\033[0;35m"); end
+def violet   ( text );             colorize(text,"\033[1;35m"); end
+def blue     ( text );             colorize(text,"\033[0;34m"); end
+def cyan     ( text );             colorize(text,"\033[0;36m"); end
+def green    ( text );             colorize(text,"\033[0;32m"); end
 
 LOG_LEVELS = { :debug => 0, :info  => 1, :warn  => 2, :error => 3, :fatal => 4 }
 
@@ -58,7 +61,7 @@ def log ( lvl, src, data='' )
   verify_var(src, Symbol)
 
   # get and set default levels
-  log_lvl = ENV.has_key?("LOG_LVL") ? ENV["LOG_LVL"].to_sym : :info
+  log_lvl = ENV.has_key?("LOGLVL") ? ENV["LOGLVL"].to_sym : :info
   log_lvl = :info unless LOG_LEVELS.keys.include?(log_lvl)
   lvl     = :info unless LOG_LEVELS.keys.include?(lvl)
 
@@ -81,7 +84,7 @@ def log ( lvl, src, data='' )
 
   case lvl
   when :debug
-    msg = teal(msg)
+    msg = cyan(msg)
   when :info
     msg = green(msg)
   when :warn
@@ -89,7 +92,7 @@ def log ( lvl, src, data='' )
   when :error
     msg = red(msg)
   when :fatal
-    msg = bred(msg)
+    msg = magenta(msg)
   end
 
   puts msg
